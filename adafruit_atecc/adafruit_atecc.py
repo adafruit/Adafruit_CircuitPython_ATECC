@@ -159,7 +159,7 @@ class ATECC:
             raise IndexError("ATECCx08 not found - please check your wiring!")
         self._i2c_bus.unlock()
         if not self._i2c_device:
-            self._i2c_device = I2CDevice(self._i2c_bus, _REG_ATECC_DEVICE_ADDR, debug=False)
+            self._i2c_device = I2CDevice(self._i2c_bus, _REG_ATECC_DEVICE_ADDR)
         # check if we are ready to read from
         r = bytearray(1)
         self._get_response(r)
