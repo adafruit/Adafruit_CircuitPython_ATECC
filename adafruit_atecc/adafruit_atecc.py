@@ -326,8 +326,8 @@ class ATECC:
         r = bytes(16)
         r = self._random(r)
         data = 0
-        for i in range(len(r)):
-            data += r[i]
+        for i in enumerate(r):
+            data += r[i[0]]
         if data < 0:
             data = -data
         data = data % delta
