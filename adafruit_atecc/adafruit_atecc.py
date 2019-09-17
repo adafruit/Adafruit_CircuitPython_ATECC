@@ -372,10 +372,7 @@ class ATECC:
                                 into the hash operation.
 
         """
-        if not hasattr(message, "append"):
-            message = pack("B", message)
         self.wakeup()
-        assert len(message) == 64, "Message provided to sha_update must be 64 bytes"
         self._send_command(OP_SHA, 0x01, 64, message)
         time.sleep(EXEC_TIME[OP_SHA]/1000)
         status = bytearray(1)
