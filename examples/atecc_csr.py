@@ -1,7 +1,5 @@
 import board
 import busio
-import time
-import adafruit_ssd1306
 from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ, CFG_TLS
 
 import adafruit_atecc.adafruit_atecc_cert_util as cert_utils
@@ -38,7 +36,7 @@ print("ATECC Serial Number: ", atecc.serial_number)
 
 if not atecc.locked:
     if not LOCK_ATECC:
-        raise RuntimeError("The ATECC is not locked, set LOCK_ATECC to True in your code.py to unlock it.")
+        raise RuntimeError("The ATECC is not locked, set LOCK_ATECC to True in code.py.")
     print("Writing default configuration to the device...")
     atecc.write_config(CFG_TLS)
     print("Wrote configuration, locking ATECC module...")
@@ -49,7 +47,7 @@ if not atecc.locked:
 print("Generating Certificate Signing Request...")
 # Initialize a certificate signing request with provided info
 csr = cert_utils.CSR(atecc, ATECC_SLOT, GENERATE_PRIVATE_KEY, MY_COUNTRY, MY_STATE,
-                MY_CITY, MY_ORG, MY_SECTION)
+                     MY_CITY, MY_ORG, MY_SECTION)
 # Generate CSR
 my_csr = csr.generate_csr()
 print("-----BEGIN CERTIFICATE REQUEST-----\n")

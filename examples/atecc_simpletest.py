@@ -1,7 +1,5 @@
 import board
 import busio
-import time
-import adafruit_ssd1306
 from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ
 
 # Initialize the i2c bus
