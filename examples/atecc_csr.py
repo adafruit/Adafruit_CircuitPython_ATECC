@@ -7,7 +7,7 @@ import adafruit_atecc.adafruit_atecc_cert_util as cert_utils
 # -- Enter your configuration below -- #
 
 # Lock the ATECC module when the code is run?
-LOCK_ATECC = True
+LOCK_ATECC = False
 # 2-letter country code
 MY_COUNTRY = "US"
 # State or Province Name
@@ -21,7 +21,7 @@ MY_SECTION = "Crypto"
 # Which ATECC slot (0-4) to use
 ATECC_SLOT = 0
 # Generate new private key, or use existing key
-GENERATE_PRIVATE_KEY = False
+GENERATE_PRIVATE_KEY = True
 
 # -- END Configuration, code below -- #
 
