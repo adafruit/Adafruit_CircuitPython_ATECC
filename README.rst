@@ -59,7 +59,7 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+Examples of using this module are in examples folder.
 
 Contributing
 ============
