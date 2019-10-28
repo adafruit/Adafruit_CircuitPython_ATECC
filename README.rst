@@ -9,9 +9,10 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ATECC.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ATECC
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_ATECC/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_ATECC/actions
     :alt: Build Status
+
 
 Driver for `Microchip's ATECCx08 cryptographic co-processors with secure hardware-based key storage <https://www.adafruit.com/product/4314>`_.
 
