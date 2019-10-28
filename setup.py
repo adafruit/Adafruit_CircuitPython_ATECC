@@ -22,7 +22,7 @@ setup(
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
 
-    description='Driver for Microchip's ATECCx08 cryptographic co-processors with secure hardware-based key storage',
+    description='Driver for Microchip\'s ATECCx08 cryptographic co-processors with secure hardware-based key storage',
     long_description=long_description,
     long_description_content_type='text/x-rst',
 
