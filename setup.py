@@ -35,7 +35,8 @@ setup(
 
     install_requires=[
         'Adafruit-Blinka',
-        'adafruit-circuitpython-busdevice'
+        'adafruit-circuitpython-busdevice',
+        'adafruit-circuitpython-binascii',
     ],
 
     # Choose your license
@@ -61,5 +62,5 @@ setup(
     # simple. Or you can use find_packages().
     # TODO: IF LIBRARY FILES ARE A PACKAGE FOLDER,
     #       CHANGE `py_modules=['...']` TO `packages=['...']`
-    py_modules=['adafruit_atecc'],
+    packages=['adafruit_atecc'],
 )
