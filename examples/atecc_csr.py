@@ -26,8 +26,7 @@ GENERATE_PRIVATE_KEY = True
 # -- END Configuration, code below -- #
 
 # Initialize the i2c bus
-i2c = busio.I2C(board.SCL, board.SDA,
-                frequency=_WAKE_CLK_FREQ)
+i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
 
 # Initialize a new atecc object
 atecc = ATECC(i2c)
@@ -36,7 +35,9 @@ print("ATECC Serial Number: ", atecc.serial_number)
 
 if not atecc.locked:
     if not LOCK_ATECC:
-        raise RuntimeError("The ATECC is not locked, set LOCK_ATECC to True in code.py.")
+        raise RuntimeError(
+            "The ATECC is not locked, set LOCK_ATECC to True in code.py."
+        )
     print("Writing default configuration to the device...")
     atecc.write_config(CFG_TLS)
     print("Wrote configuration, locking ATECC module...")
@@ -46,10 +47,18 @@ if not atecc.locked:
 
 print("Generating Certificate Signing Request...")
 # Initialize a certificate signing request with provided info
-csr = cert_utils.CSR(atecc, ATECC_SLOT, GENERATE_PRIVATE_KEY, MY_COUNTRY, MY_STATE,
-                     MY_CITY, MY_ORG, MY_SECTION)
+csr = cert_utils.CSR(
+    atecc,
+    ATECC_SLOT,
+    GENERATE_PRIVATE_KEY,
+    MY_COUNTRY,
+    MY_STATE,
+    MY_CITY,
+    MY_ORG,
+    MY_SECTION,
+)
 # Generate CSR
 my_csr = csr.generate_csr()
 print("-----BEGIN CERTIFICATE REQUEST-----\n")
-print(my_csr.decode('utf-8'))
+print(my_csr.decode("utf-8"))
 print("-----END CERTIFICATE REQUEST-----")

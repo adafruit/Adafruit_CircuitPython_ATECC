@@ -54,6 +54,7 @@ Implementation Notes
 from adafruit_binascii import b2a_base64
 import adafruit_atecc.adafruit_atecc_asn1 as asn1
 
+
 class CSR:
     """Certificate Signing Request Builder.
 
@@ -67,9 +68,11 @@ class CSR:
     :param str org_unit: Organizational unit name.
 
     """
+
     # pylint: disable=too-many-arguments, too-many-instance-attributes
-    def __init__(self, atecc, slot_num, private_key, country, state_prov,
-                 city, org, org_unit):
+    def __init__(
+        self, atecc, slot_num, private_key, country, state_prov, city, org, org_unit
+    ):
         self._atecc = atecc
         self.private_key = private_key
         self._slot = slot_num
@@ -89,7 +92,6 @@ class CSR:
         csr = self._csr_end()
         return csr
 
-
     def _csr_begin(self):
         """Initializes CSR generation. """
         assert 0 <= self._slot <= 4, "Provided slot must be between 0 and 4."
@@ -100,13 +102,17 @@ class CSR:
             return
         self._atecc.gen_key(self._key, self._slot, self.private_key)
 
-
     def _csr_end(self):
         """Generates and returns
         a certificate signing request as a base64 string."""
-        len_issuer_subject = asn1.issuer_or_subject_length(self._country, self._state_province,
-                                                           self._locality, self._org,
-                                                           self._org_unit, self._common)
+        len_issuer_subject = asn1.issuer_or_subject_length(
+            self._country,
+            self._state_province,
+            self._locality,
+            self._org,
+            self._org_unit,
+            self._common,
+        )
         len_sub_header = asn1.get_sequence_header_length(len_issuer_subject)
 
         len_csr_info = self._version_len + len_issuer_subject
@@ -126,8 +132,15 @@ class CSR:
         asn1.get_sequence_header(len_issuer_subject, csr_info)
 
         # Append Issuer or Subject
-        asn1.get_issuer_or_subject(csr_info, self._country, self._state_province,
-                                   self._locality, self._org, self._org_unit, self._common)
+        asn1.get_issuer_or_subject(
+            csr_info,
+            self._country,
+            self._state_province,
+            self._locality,
+            self._org,
+            self._org_unit,
+            self._common,
+        )
 
         # Append Public Key
         asn1.get_public_key(csr_info, self._key)
@@ -145,7 +158,7 @@ class CSR:
             if chunk_len > 64:
                 chunk_len = 64
             if chunk_len == 64:
-                self._atecc.sha_update(csr_info[i:i+64])
+                self._atecc.sha_update(csr_info[i : i + 64])
             else:
                 csr_info_sha_256 = self._atecc.sha_digest(csr_info[i:])
 
