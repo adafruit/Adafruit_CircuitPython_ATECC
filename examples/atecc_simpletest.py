@@ -3,8 +3,7 @@ import busio
 from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ
 
 # Initialize the i2c bus
-i2c = busio.I2C(board.SCL, board.SDA,
-                frequency=_WAKE_CLK_FREQ)
+i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
 
 # Initialize a new atecc object
 atecc = ATECC(i2c)
