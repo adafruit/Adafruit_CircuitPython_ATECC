@@ -217,8 +217,8 @@ class ATECC:
         serial_num[8] = temp_sn[0]
         time.sleep(0.001)
         # neaten up the serial for printing
-        serial_num = hexlify(serial_num).decode("utf-8")
-        serial_num = str(serial_num).upper()
+        serial_num = str(hexlify(serial_num), "utf-8")
+        serial_num = serial_num.upper()
         return serial_num
 
     def version(self):
