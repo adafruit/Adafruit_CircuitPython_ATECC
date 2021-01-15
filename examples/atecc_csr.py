@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 import board
 import busio
 from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ, CFG_TLS
