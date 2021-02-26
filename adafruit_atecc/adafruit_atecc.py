@@ -134,20 +134,20 @@ Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATE
 """
 CFG_TLS_HEX = bytes(
     bytearray.fromhex(
-        '01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00'
-        '20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55'
-        '00 83 20 87 20 87 20 87  2f 87 2f 8f 8f 9f 8f af'
-        '20 20 20 20 20 20 20 20  20 20 20 20 20 8f 00 00'
-        '00 00 00 00 00 00 00 00  00 00 00 00 20 20 20 20'
-        '20 20 20 20 20 20 20 20  20 af 8f ff ff ff ff 00'
-        '00 00 00 ff ff ff ff 00  20 20 20 20 20 20 20 20'
-        '20 20 20 20 20 00 00 00  ff ff ff ff ff ff ff ff'
-        'ff ff ff ff 20 20 20 20  20 20 20 20 20 20 20 20'
-        '20 ff ff ff ff 00 00 55  55 ff ff 00 00 00 00 00'
-        '00 33 20 20 20 20 20 20  20 20 20 20 20 20 20 00'
-        '33 00 33 00 33 00 33 00  1c 00 1c 00 1c 00 3c 00'
-        '3c 00 3c 00 3c 20 20 20  20 20 20 20 20 20 20 20'
-        '20 20 00 3c 00 3c 00 3c  00 1c 00'
+        "01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00"
+        "20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55"
+        "00 83 20 87 20 87 20 87  2f 87 2f 8f 8f 9f 8f af"
+        "20 20 20 20 20 20 20 20  20 20 20 20 20 8f 00 00"
+        "00 00 00 00 00 00 00 00  00 00 00 00 20 20 20 20"
+        "20 20 20 20 20 20 20 20  20 af 8f ff ff ff ff 00"
+        "00 00 00 ff ff ff ff 00  20 20 20 20 20 20 20 20"
+        "20 20 20 20 20 00 00 00  ff ff ff ff ff ff ff ff"
+        "ff ff ff ff 20 20 20 20  20 20 20 20 20 20 20 20"
+        "20 ff ff ff ff 00 00 55  55 ff ff 00 00 00 00 00"
+        "00 33 20 20 20 20 20 20  20 20 20 20 20 20 20 00"
+        "33 00 33 00 33 00 33 00  1c 00 1c 00 1c 00 3c 00"
+        "3c 00 3c 00 3c 20 20 20  20 20 20 20 20 20 20 20"
+        "20 20 00 3c 00 3c 00 3c  00 1c 00"
     )
 )
 
@@ -319,7 +319,7 @@ class ATECC:
         time.sleep(1 / 1000)
         if mode == 0x03:
             assert (
-                    calculated_nonce[0] == 0x00
+                calculated_nonce[0] == 0x00
             ), "Incorrectly calculated nonce in pass-thru mode"
         self.idle()
         return calculated_nonce
@@ -489,7 +489,7 @@ class ATECC:
             if i == 84:
                 # can't write
                 continue
-            self._write(0, i // 4, data[i: i + 4])
+            self._write(0, i // 4, data[i : i + 4])
 
     def _write(self, zone, address, buffer):
         self.wakeup()
