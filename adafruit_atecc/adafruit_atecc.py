@@ -115,7 +115,7 @@ Configuration Zone Bytes
 Serial Number (Bytes 0-3 and 8-12), Revision Number (Bytes 4-7)
 AES Enable (Byte 13), I2C Enable (Byte 14), Reserved (Byte 15)
 I2C Address (Byte 16), Reserved (Byte 17); Count Match (Byte 18)
-Chi Mode (Byte 19), Slot Config (Bytes 20-51)
+Chip Mode (Byte 19), Slot Config (Bytes 20-51)
 Counter 0 (Bytes 52-59), Counter 1 (Bytes 60-67)
 Use Lock (Byte 68), Volatile Key Permission (Byte 69)
 Secure Boot (Bytes 70-71), KDF (Bytes 72-74)
