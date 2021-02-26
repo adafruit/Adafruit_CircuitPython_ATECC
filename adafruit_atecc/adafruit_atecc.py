@@ -128,7 +128,7 @@ I2C Config
          HEX    DEC     BIN         Description
 Byte 14: C0     192     1100 0000
                         ^xxx xxxx   Bit 0 (MSB): 0:Single Wire, 1:I2C; Bit 1-7: Set by Microchip
-Byte 16: C0     192     0010 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA
+Byte 16: C0     192     1100 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA
 Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
 Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
 """
