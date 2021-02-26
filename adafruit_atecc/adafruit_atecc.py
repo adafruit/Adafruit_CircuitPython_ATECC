@@ -110,6 +110,8 @@ CFG_TLS = b"\x01#\x00\x00\x00\x00P\x00\x00\x00\x00\x00\x00\xc0q\x00 \
             \x00<\x00<\x00<\x00\x1c\x00"
 
 """
+Configuration Zone Bytes
+
 Serial Number (Bytes 0-3 and 8-12), Revision Number (Bytes 4-7)
 AES Enable (Byte 13), I2C Enable (Byte 14), Reserved (Byte 15)
 I2C Address (Byte 16), Reserved (Byte 17); Count Match (Byte 18)
@@ -120,6 +122,15 @@ Secure Boot (Bytes 70-71), KDF (Bytes 72-74)
 Reserved (Bytes 75-83), User Extra (Bytes 84-85)
 Lock Config (Bytes 86-89), Chip Options (Bytes 90-91)
 X509 (Bytes 92-95), Key Config (Bytes 96-127)
+
+I2C Config
+
+         HEX    DEC     BIN         Description
+Byte 14: C0     192     1100 0000
+                        ^xxx xxxx   Bit 0 (MSB): 0:Single Wire, 1:I2C; Bit 1-7: Set by Microchip
+Byte 16: C0     192     0010 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA
+Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
+Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
 """
 CFG_TLS_HEX = bytes(
     bytearray.fromhex(
@@ -144,16 +155,7 @@ CFG_TLS_HEX = bytes(
 # TODO: Decide whether to use alternate representation of config bytes
 # TODO: Remove assertion tests
 assert CFG_TLS == CFG_TLS_HEX
-assert bytearray(CFG_TLS)[16] == 0x20  #
-
-"""I2C Config
-         HEX    DEC     BIN         Description
-Byte 14: C0     192     1100 0000
-                        ^xxx xxxx   Bit 0 (MSB): 0:Single Wire, 1:I2C; Bit 1-7: Set by Microchip
-Byte 16: C0     192     0010 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA
-Byte 16: 6A     106     0010 0000   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
-Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
-"""
+assert bytearray(CFG_TLS)[16] == 0x20
 
 # Convert I2C address to config byte 16 and update CFG_TLS
 _CFG_BYTES = bytearray(CFG_TLS)
