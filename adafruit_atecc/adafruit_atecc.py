@@ -300,7 +300,7 @@ class ATECC:
         time.sleep(1 / 1000)
         if mode == 0x03:
             assert (
-                    calculated_nonce[0] == 0x00
+                calculated_nonce[0] == 0x00
             ), "Incorrectly calculated nonce in pass-thru mode"
         self.idle()
         return calculated_nonce
@@ -470,7 +470,7 @@ class ATECC:
             if i == 84:
                 # can't write
                 continue
-            self._write(0, i // 4, data[i: i + 4])
+            self._write(0, i // 4, data[i : i + 4])
 
     def _write(self, zone, address, buffer):
         self.wakeup()
