@@ -62,10 +62,6 @@ def _convert_i2c_addr_to_atecc_addr(i2c_addr=0x60):
 _I2C_ADDR = 0x60
 _REG_ATECC_ADDR = _convert_i2c_addr_to_atecc_addr(i2c_addr=_I2C_ADDR)
 
-# TODO: Verify that _REG_ATECC_ADDR is still 0xC0
-# TODO: Remove assertion test afterwards
-assert _REG_ATECC_ADDR == 0xC0
-
 _REG_ATECC_DEVICE_ADDR = _REG_ATECC_ADDR >> 1
 
 # Version Registers
@@ -99,15 +95,6 @@ EXEC_TIME = {
     OP_SIGN: const(70),
     OP_WRITE: const(26),
 }
-
-CFG_TLS = b"\x01#\x00\x00\x00\x00P\x00\x00\x00\x00\x00\x00\xc0q\x00 \
-            \xc0\x00U\x00\x83 \x87 \x87 \x87/\x87/\x8f\x8f\x9f\x8f\xaf \
-            \x8f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00 \
-            \xaf\x8f\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff\x00 \
-            \x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff \
-            \xff\xff\xff\xff\x00\x00UU\xff\xff\x00\x00\x00\x00\x00\x003 \
-            \x003\x003\x003\x003\x00\x1c\x00\x1c\x00\x1c\x00<\x00<\x00<\x00< \
-            \x00<\x00<\x00<\x00\x1c\x00"
 
 """
 Configuration Zone Bytes
@@ -150,12 +137,6 @@ CFG_TLS_HEX = bytes(
         "20 20 00 3c 00 3c 00 3c  00 1c 00"
     )
 )
-
-# TODO: Verify that both representations are identical
-# TODO: Decide whether to use alternate representation of config bytes
-# TODO: Remove assertion tests
-assert CFG_TLS == CFG_TLS_HEX
-assert bytearray(CFG_TLS)[16] == 0x20
 
 # Convert I2C address to config byte 16 and update CFG_TLS
 _CFG_BYTES = bytearray(CFG_TLS)
