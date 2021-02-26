@@ -54,7 +54,7 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ATECC.git"
 
 
 def _convert_i2c_addr_to_atecc_addr(i2c_addr=0x60):
-    int(i2c_addr, 16)
+    int(hex(i2c_addr), 16)
     return i2c_addr << 1
 
 
@@ -119,7 +119,7 @@ Byte 16: C0     192     1100 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATE
 Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
 Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
 """
-CFG_TLS_HEX = bytes(
+CFG_TLS = bytes(
     bytearray.fromhex(
         "01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00"
         "20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55"
@@ -139,10 +139,10 @@ CFG_TLS_HEX = bytes(
 )
 
 # Convert I2C address to config byte 16 and update CFG_TLS
-_CFG_BYTES = bytearray(CFG_TLS)
-_CFG_BYTE_16 = hex(_I2C_ADDR << 1)
-_CFG_BYTES[16] = ord(_CFG_BYTE_16)
-CFG_TLS = bytes(_CFG_BYTES)
+_CFG_BYTES_LIST = list(bytearray(CFG_TLS))
+_CFG_BYTE_16 = bytes(bytearray.fromhex(hex(_I2C_ADDR << 1).replace("0x", "")))
+_CFG_BYTES_LIST_MOD = _CFG_BYTES_LIST[0:16] + list(_CFG_BYTE_16) + _CFG_BYTES_LIST[17:]
+CFG_TLS = bytes(_CFG_BYTES_LIST_MOD)
 
 
 class ATECC:
@@ -300,7 +300,7 @@ class ATECC:
         time.sleep(1 / 1000)
         if mode == 0x03:
             assert (
-                calculated_nonce[0] == 0x00
+                    calculated_nonce[0] == 0x00
             ), "Incorrectly calculated nonce in pass-thru mode"
         self.idle()
         return calculated_nonce
@@ -470,7 +470,7 @@ class ATECC:
             if i == 84:
                 # can't write
                 continue
-            self._write(0, i // 4, data[i : i + 4])
+            self._write(0, i // 4, data[i: i + 4])
 
     def _write(self, zone, address, buffer):
         self.wakeup()
