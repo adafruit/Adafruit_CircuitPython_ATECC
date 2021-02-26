@@ -155,7 +155,7 @@ CFG_TLS_HEX = bytes(
 # TODO: Decide whether to use alternate representation of config bytes
 # TODO: Remove assertion tests
 assert CFG_TLS == CFG_TLS_HEX
-assert bytearray(CFG_TLS)[16] == 0x20
+assert bytearray(CFG_TLS)[16] == 0x20  #
 
 # Convert I2C address to config byte 16 and update CFG_TLS
 _CFG_BYTES = bytearray(CFG_TLS)
