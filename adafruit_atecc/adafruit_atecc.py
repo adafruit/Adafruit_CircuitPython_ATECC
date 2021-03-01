@@ -54,17 +54,13 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ATECC.git"
 
 
 def _convert_i2c_addr_to_atecc_addr(i2c_addr=0x60):
-    int(i2c_addr, 16)
+    int(hex(i2c_addr), 16)
     return i2c_addr << 1
 
 
 # Device Address
 _I2C_ADDR = 0x60
 _REG_ATECC_ADDR = _convert_i2c_addr_to_atecc_addr(i2c_addr=_I2C_ADDR)
-
-# TODO: Verify that _REG_ATECC_ADDR is still 0xC0
-# TODO: Remove assertion test afterwards
-assert _REG_ATECC_ADDR == 0xC0
 
 _REG_ATECC_DEVICE_ADDR = _REG_ATECC_ADDR >> 1
 
@@ -100,15 +96,6 @@ EXEC_TIME = {
     OP_WRITE: const(26),
 }
 
-CFG_TLS = b"\x01#\x00\x00\x00\x00P\x00\x00\x00\x00\x00\x00\xc0q\x00 \
-            \xc0\x00U\x00\x83 \x87 \x87 \x87/\x87/\x8f\x8f\x9f\x8f\xaf \
-            \x8f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00 \
-            \xaf\x8f\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff\x00 \
-            \x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff \
-            \xff\xff\xff\xff\x00\x00UU\xff\xff\x00\x00\x00\x00\x00\x003 \
-            \x003\x003\x003\x003\x00\x1c\x00\x1c\x00\x1c\x00<\x00<\x00<\x00< \
-            \x00<\x00<\x00<\x00\x1c\x00"
-
 """
 Configuration Zone Bytes
 
@@ -132,7 +119,7 @@ Byte 16: C0     192     1100 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATE
 Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
 Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
 """
-CFG_TLS_HEX = bytes(
+CFG_TLS = bytes(
     bytearray.fromhex(
         "01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00"
         "20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55"
@@ -151,17 +138,11 @@ CFG_TLS_HEX = bytes(
     )
 )
 
-# TODO: Verify that both representations are identical
-# TODO: Decide whether to use alternate representation of config bytes
-# TODO: Remove assertion tests
-assert CFG_TLS == CFG_TLS_HEX
-assert bytearray(CFG_TLS)[16] == 0x20
-
 # Convert I2C address to config byte 16 and update CFG_TLS
-_CFG_BYTES = bytearray(CFG_TLS)
-_CFG_BYTE_16 = hex(_I2C_ADDR << 1)
-_CFG_BYTES[16] = ord(_CFG_BYTE_16)
-CFG_TLS = bytes(_CFG_BYTES)
+_CFG_BYTES_LIST = list(bytearray(CFG_TLS))
+_CFG_BYTE_16 = bytes(bytearray.fromhex(hex(_I2C_ADDR << 1).replace("0x", "")))
+_CFG_BYTES_LIST_MOD = _CFG_BYTES_LIST[0:16] + list(_CFG_BYTE_16) + _CFG_BYTES_LIST[17:]
+CFG_TLS = bytes(_CFG_BYTES_LIST_MOD)
 
 
 class ATECC:
