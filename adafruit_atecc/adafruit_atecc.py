@@ -47,7 +47,7 @@ import time
 from struct import pack
 from micropython import const
 from adafruit_bus_device.i2c_device import I2CDevice
-from adafruit_binascii import hexlify
+from adafruit_binascii import hexlify, unhexlify
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ATECC.git"
@@ -120,27 +120,31 @@ Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATE
 Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
 """
 CFG_TLS = bytes(
-    bytearray.fromhex(
-        "01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00"
-        "20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55"
-        "00 83 20 87 20 87 20 87  2f 87 2f 8f 8f 9f 8f af"
-        "20 20 20 20 20 20 20 20  20 20 20 20 20 8f 00 00"
-        "00 00 00 00 00 00 00 00  00 00 00 00 20 20 20 20"
-        "20 20 20 20 20 20 20 20  20 af 8f ff ff ff ff 00"
-        "00 00 00 ff ff ff ff 00  20 20 20 20 20 20 20 20"
-        "20 20 20 20 20 00 00 00  ff ff ff ff ff ff ff ff"
-        "ff ff ff ff 20 20 20 20  20 20 20 20 20 20 20 20"
-        "20 ff ff ff ff 00 00 55  55 ff ff 00 00 00 00 00"
-        "00 33 20 20 20 20 20 20  20 20 20 20 20 20 20 00"
-        "33 00 33 00 33 00 33 00  1c 00 1c 00 1c 00 3c 00"
-        "3c 00 3c 00 3c 20 20 20  20 20 20 20 20 20 20 20"
-        "20 20 00 3c 00 3c 00 3c  00 1c 00"
+    bytearray(
+        unhexlify(
+            (
+                "01 23 00 00 00 00 50 00  00 00 00 00 00 c0 71 00"
+                "20 20 20 20 20 20 20 20  20 20 20 20 20 c0 00 55"
+                "00 83 20 87 20 87 20 87  2f 87 2f 8f 8f 9f 8f af"
+                "20 20 20 20 20 20 20 20  20 20 20 20 20 8f 00 00"
+                "00 00 00 00 00 00 00 00  00 00 00 00 20 20 20 20"
+                "20 20 20 20 20 20 20 20  20 af 8f ff ff ff ff 00"
+                "00 00 00 ff ff ff ff 00  20 20 20 20 20 20 20 20"
+                "20 20 20 20 20 00 00 00  ff ff ff ff ff ff ff ff"
+                "ff ff ff ff 20 20 20 20  20 20 20 20 20 20 20 20"
+                "20 ff ff ff ff 00 00 55  55 ff ff 00 00 00 00 00"
+                "00 33 20 20 20 20 20 20  20 20 20 20 20 20 20 00"
+                "33 00 33 00 33 00 33 00  1c 00 1c 00 1c 00 3c 00"
+                "3c 00 3c 00 3c 20 20 20  20 20 20 20 20 20 20 20"
+                "20 20 00 3c 00 3c 00 3c  00 1c 00"
+            ).replace(" ", "")
+        )
     )
 )
 
 # Convert I2C address to config byte 16 and update CFG_TLS
 _CFG_BYTES_LIST = list(bytearray(CFG_TLS))
-_CFG_BYTE_16 = bytes(bytearray.fromhex(hex(_I2C_ADDR << 1).replace("0x", "")))
+_CFG_BYTE_16 = bytes(bytearray(unhexlify(hex(_I2C_ADDR << 1).replace("0x", ""))))
 _CFG_BYTES_LIST_MOD = _CFG_BYTES_LIST[0:16] + list(_CFG_BYTE_16) + _CFG_BYTES_LIST[17:]
 CFG_TLS = bytes(_CFG_BYTES_LIST_MOD)
 
