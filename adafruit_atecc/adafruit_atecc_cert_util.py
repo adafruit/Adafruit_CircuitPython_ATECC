@@ -140,8 +140,7 @@ class CSR:
         for i in range(0, len_csr_info + len_csr_info_header, 64):
             chunk_len = (len_csr_info_header + len_csr_info) - i
 
-            if chunk_len > 64:
-                chunk_len = 64
+            chunk_len = min(chunk_len, 64)
             if chunk_len == 64:
                 self._atecc.sha_update(csr_info[i : i + 64])
             else:
