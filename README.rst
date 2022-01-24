@@ -2,7 +2,7 @@ Introduction
 ============
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-atecc/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/atecc/en/latest/
+    :target: https://docs.circuitpython.org/projects/atecc/en/latest/
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/discord/327254708534116352.svg
@@ -65,7 +65,7 @@ Examples of using this module are in examples folder.
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/atecc/en/latest/>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/atecc/en/latest/>`_.
 
 Contributing
 ============
