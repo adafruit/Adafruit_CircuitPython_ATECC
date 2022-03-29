@@ -78,7 +78,7 @@ class CSR:
         return csr
 
     def _csr_begin(self):
-        """Initializes CSR generation. """
+        """Initializes CSR generation."""
         assert 0 <= self._slot <= 4, "Provided slot must be between 0 and 4."
         # Create a new key
         self._key = bytearray(64)
