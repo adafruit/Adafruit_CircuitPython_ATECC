@@ -91,7 +91,15 @@ def get_signature(signature: str, data: str) -> None:
 
 
 # pylint: disable=too-many-arguments
-def get_issuer_or_subject(data: str, country: str, state_prov: str, locality: str, org: str, org_unit: str, common: str) -> None:
+def get_issuer_or_subject(
+    data: str,
+    country: str,
+    state_prov: str,
+    locality: str,
+    org: str,
+    org_unit: str,
+    common: str,
+) -> None:
     """Appends issuer or subject, if they exist, to data."""
     if country:
         get_name(country, 0x06, data)
