@@ -37,11 +37,6 @@ Implementation Notes
 """
 import struct
 
-try:
-    from typing import List, Tuple
-except ImportError:
-    pass
-
 # pylint: disable=invalid-name
 def get_signature(signature: str, data: str) -> None:
     """Appends signature data to buffer."""
