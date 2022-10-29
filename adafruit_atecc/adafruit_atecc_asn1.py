@@ -37,8 +37,13 @@ Implementation Notes
 """
 import struct
 
+try:
+    from typing import List, Tuple
+except ImportError:
+    pass
+
 # pylint: disable=invalid-name
-def get_signature(signature, data):
+def get_signature(signature: str, data: str) -> None:
     """Appends signature data to buffer."""
     # Signature algorithm
     data += b"\x30\x0a\x06\x08"
@@ -91,7 +96,7 @@ def get_signature(signature, data):
 
 
 # pylint: disable=too-many-arguments
-def get_issuer_or_subject(data, country, state_prov, locality, org, org_unit, common):
+def get_issuer_or_subject(data: str, country: str, state_prov: str, locality: str, org: str, org_unit: str, common: str) -> None:
     """Appends issuer or subject, if they exist, to data."""
     if country:
         get_name(country, 0x06, data)
