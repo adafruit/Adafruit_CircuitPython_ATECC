@@ -46,8 +46,9 @@ Implementation Notes
 import time
 from struct import pack
 
-# Since the board may or may not have access to the typing library we need to have this in a try/except to enable type
-# hinting for the IDEs while not breaking the runtime on the controller.
+# Since the board may or may not have access to the typing library we need
+# to have this in a try/except to enable type  hinting for the IDEs while
+# not breaking the runtime on the controller.
 try:
     from typing import Any, Sized
 except ImportError:
