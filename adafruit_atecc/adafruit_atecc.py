@@ -162,7 +162,9 @@ class ATECC:
     CircuitPython interface for ATECCx08A Crypto Co-Processor Devices.
     """
 
-    def __init__(self, i2c_bus: I2C, address: int =_REG_ATECC_DEVICE_ADDR, debug: bool = False):
+    def __init__(
+        self, i2c_bus: I2C, address: int = _REG_ATECC_DEVICE_ADDR, debug: bool = False
+    ):
         """
         Initializes an ATECC device.
 
@@ -447,7 +449,9 @@ class ATECC:
         self.idle()
         return digest
 
-    def gen_key(self, key: bytearray, slot_num: int, private_key: bool = False) -> bytearray:
+    def gen_key(
+        self, key: bytearray, slot_num: int, private_key: bool = False
+    ) -> bytearray:
         """
         Generates a private or public key.
 
@@ -549,7 +553,9 @@ class ATECC:
         time.sleep(0.001)
         self.idle()
 
-    def _send_command(self, opcode: int, param_1: int, param_2: int = 0x00, data: Sized = ""):
+    def _send_command(
+        self, opcode: int, param_1: int, param_2: int = 0x00, data: Sized = ""
+    ):
         """
         Sends a security command packet over i2c.
 

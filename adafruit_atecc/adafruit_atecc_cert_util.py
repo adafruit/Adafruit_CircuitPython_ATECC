@@ -57,8 +57,15 @@ class CSR:
 
     # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(
-        self, atecc: ATECC, slot_num: int, private_key: bool, country: str, state_prov: str, city: str,
-            org: str, org_unit: str
+        self,
+        atecc: ATECC,
+        slot_num: int,
+        private_key: bool,
+        country: str,
+        state_prov: str,
+        city: str,
+        org: str,
+        org_unit: str,
     ):
         self._atecc = atecc
         self.private_key = private_key

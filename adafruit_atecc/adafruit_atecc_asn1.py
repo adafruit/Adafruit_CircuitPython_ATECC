@@ -98,8 +98,15 @@ def get_signature(signature: bytearray, data: bytearray) -> int:
 
 
 # pylint: disable=too-many-arguments
-def get_issuer_or_subject(data: bytearray, country: str, state_prov: str, locality: str, org: str,
-                          org_unit: str, common: str):
+def get_issuer_or_subject(
+    data: bytearray,
+    country: str,
+    state_prov: str,
+    locality: str,
+    org: str,
+    org_unit: str,
+    common: str,
+):
     """
     Appends issuer or subject, if they exist, to data.
 
@@ -234,7 +241,9 @@ def get_sequence_header_length(seq_header_len: int) -> int:
     return 2
 
 
-def issuer_or_subject_length(country: str, state_prov: str, city: str, org: str, org_unit: str, common: str) -> int:
+def issuer_or_subject_length(
+    country: str, state_prov: str, city: str, org: str, org_unit: str, common: str
+) -> int:
     """
     Returns total length of provided certificate information.
 
