@@ -38,6 +38,7 @@ Implementation Notes
 """
 from adafruit_binascii import b2a_base64
 import adafruit_atecc.adafruit_atecc_asn1 as asn1
+from adafruit_atecc.adafruit_atecc import ATECC
 
 
 class CSR:
@@ -56,7 +57,8 @@ class CSR:
 
     # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(
-        self, atecc, slot_num, private_key, country, state_prov, city, org, org_unit
+        self, atecc: ATECC, slot_num: int, private_key: bool, country: str, state_prov: str, city: str,
+            org: str, org_unit: str
     ):
         self._atecc = atecc
         self.private_key = private_key

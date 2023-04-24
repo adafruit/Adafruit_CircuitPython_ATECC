@@ -37,9 +37,16 @@ Implementation Notes
 """
 import struct
 
+
 # pylint: disable=invalid-name
-def get_signature(signature, data):
-    """Appends signature data to buffer."""
+def get_signature(signature: bytearray, data: bytearray) -> int:
+    """
+    Appends signature data to buffer.
+
+    :param bytearray signature: The signature to append
+    :param bytearray data: The buffer to append the signature to
+    :return: Updated length of the buffer
+    """
     # Signature algorithm
     data += b"\x30\x0a\x06\x08"
     # ECDSA with SHA256
@@ -91,8 +98,19 @@ def get_signature(signature, data):
 
 
 # pylint: disable=too-many-arguments
-def get_issuer_or_subject(data, country, state_prov, locality, org, org_unit, common):
-    """Appends issuer or subject, if they exist, to data."""
+def get_issuer_or_subject(data: bytearray, country: str, state_prov: str, locality: str, org: str,
+                          org_unit: str, common: str):
+    """
+    Appends issuer or subject, if they exist, to data.
+
+    :param bytearray data: buffer to append to
+    :param str country: The country to append to the buffer
+    :param str state_prov: The state/province to append to the buffer
+    :param str locality: The locality to append to the buffer
+    :param str org: The organization to append to the buffer
+    :param str org_unit: The organizational unit to append to the buffer
+    :param str common: The common data to append to the buffer
+    """
     if country:
         get_name(country, 0x06, data)
     if state_prov:
@@ -107,11 +125,14 @@ def get_issuer_or_subject(data, country, state_prov, locality, org, org_unit, co
         get_name(common, 0x03, data)
 
 
-def get_name(name, obj_type, data):
-    """Appends ASN.1 string in form: set -> seq -> objid -> string
+def get_name(name: str, obj_type: int, data: bytearray) -> int:
+    """
+    Appends ASN.1 string in form: set -> seq -> objid -> string
+
     :param str name: String to append to buffer.
     :param int obj_type: Object identifier type.
     :param bytearray data: Buffer to write to.
+    :return: Length of the updated buffer
     """
     # ASN.1 SET
     data += b"\x31" + struct.pack("B", len(name) + 9)
@@ -126,15 +147,24 @@ def get_name(name, obj_type, data):
     return len(name) + 11
 
 
-def get_version(data):
-    """Appends X.509 version to data."""
+def get_version(data: bytearray):
+    """
+    Appends X.509 version to data.
+
+    :param bytearray data: Buffer to append the version to
+    """
     #  If no extensions are present, but a UniqueIdentifier
     #  is present, the version SHOULD be 2 (value is 1) [4-1-2]
     data += b"\x02\x01\x00"
 
 
-def get_sequence_header(length, data):
-    """Appends sequence header to provided data."""
+def get_sequence_header(length: int, data: bytearray):
+    """
+    Appends sequence header to provided data.
+
+    :param int length: Length of the buffer
+    :param bytearray data: The buffer
+    """
     data += b"\x30"
     if length > 255:
         data += b"\x82"
@@ -145,8 +175,13 @@ def get_sequence_header(length, data):
     data += length_byte
 
 
-def get_public_key(data, public_key):
-    """Appends public key subject and object identifiers."""
+def get_public_key(data: bytearray, public_key: bytearray):
+    """
+    Appends public key subject and object identifiers.
+
+    :param bytearray data: buffer
+    :param bytearray public_key: Public key to append
+    """
     # Subject: Public Key
     data += b"\x30" + struct.pack("B", (0x59) & 0xFF) + b"\x30\x13"
     # Object identifier: EC Public Key
@@ -157,9 +192,12 @@ def get_public_key(data, public_key):
     data += public_key
 
 
-def get_signature_length(signature):
-    """Return length of ECDSA signature.
+def get_signature_length(signature: bytearray) -> int:
+    """
+    Return length of ECDSA signature.
+
     :param bytearray signature: Signed SHA256 hash.
+    :return: length of ECDSA signature.
     """
     r = signature[0]
     s = signature[32]
@@ -182,8 +220,13 @@ def get_signature_length(signature):
     return 21 + r_len + s_len
 
 
-def get_sequence_header_length(seq_header_len):
-    """Returns length of SEQUENCE header."""
+def get_sequence_header_length(seq_header_len: int) -> int:
+    """
+    Returns length of SEQUENCE header.
+
+    :param int seq_header_len: Sequence header length
+    :return: Length of the sequence header
+    """
     if seq_header_len > 255:
         return 4
     if seq_header_len > 127:
@@ -191,8 +234,19 @@ def get_sequence_header_length(seq_header_len):
     return 2
 
 
-def issuer_or_subject_length(country, state_prov, city, org, org_unit, common):
-    """Returns total length of provided certificate information."""
+def issuer_or_subject_length(country: str, state_prov: str, city: str, org: str, org_unit: str, common: str) -> int:
+    """
+    Returns total length of provided certificate information.
+
+    :param str country: Country of certificate
+    :param str state_prov: State/province of certificate
+    :param str city: City of certificate
+    :param str org: Organization of certificate
+    :param str org_unit: Organization unit of certificate
+    :param str common: Common data of certificate
+    :raises: TypeError if return value is 0
+    :return: Total length of provided certificate information.
+    """
     tot_len = 0
     if country:
         tot_len += 11 + len(country)
