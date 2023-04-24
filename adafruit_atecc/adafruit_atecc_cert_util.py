@@ -46,7 +46,8 @@ class CSR:
 
     :param adafruit_atecc atecc: ATECC module.
     :param slot_num: ATECC module slot (from 0 to 4).
-    :param bool private_key: Generate a new private key in selected slot?
+    :param bool private_key: Generate a new private
+                             key in selected slot?
     :param str country: 2-letter country code.
     :param str state_prov: State or Province name,
     :param str city: City name.
