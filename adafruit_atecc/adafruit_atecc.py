@@ -36,13 +36,14 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 
- * Adafruit Bus Device library:
+* Adafruit Bus Device library:
   https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 
- * Adafruit binascii library:
+* Adafruit binascii library:
   https://github.com/adafruit/Adafruit_CircuitPython_binascii
 
 """
+
 import time
 from struct import pack
 
@@ -106,6 +107,7 @@ EXEC_TIME = {
     OP_WRITE: const(26),
 }
 
+# pylint: disable=line-too-long
 """
 Configuration Zone Bytes
 
@@ -122,13 +124,21 @@ X509 (Bytes 92-95), Key Config (Bytes 96-127)
 
 I2C Config
 
-         HEX    DEC     BIN         Description
-Byte 14: C0     192     1100 0000
-                        ^xxx xxxx   Bit 0 (MSB): 0:Single Wire, 1:I2C; Bit 1-7: Set by Microchip
-Byte 16: C0     192     1100 0000   Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA
-Byte 16: 6A     106     0110 1010   Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS
-Byte 16: 20      32     0010 0000   Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN
++------+-------+---------+-------------+---------------------------------------------------------------+
+| HEX          | DEC     | BIN         | Description                                                   |
++======+=======+=========+=============+===============================================================+
+| Byte 14: C0  |   192   |  1100 0000  |                                                               |
+|              |         |   ^xxx xxxx |  Bit 0 (MSB): 0:Single Wire, 1:I2C; Bit 1-7: Set by Microchip |
++--------------+---------+-------------+---------------------------------------------------------------+
+| Byte 16: C0  |  192    | 1100 0000   | Default 7 bit I2C Address: 0xC0>>1: 0x60 ATECC608A-MAHDA      |
++--------------+---------+-------------+---------------------------------------------------------------+
+| Byte 16: 6A  |  106    | 0110 1010   | Default 7 bit I2C Address: 0x6A>>1: 0x35 ATECC608A-TNGTLS     |
++--------------+---------+-------------+---------------------------------------------------------------+
+| Byte 16: 20  |    32   |  0010 0000  | Default 7 bit I2C Address: 0x20>>1: 0x10 ATECC608A-UNKNOWN    |
++--------------+---------+-------------+---------------------------------------------------------------+
+
 """
+
 CFG_TLS = bytes(
     bytearray(
         unhexlify(
