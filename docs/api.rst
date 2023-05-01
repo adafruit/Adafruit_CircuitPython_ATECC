@@ -7,3 +7,12 @@ API
 
 .. automodule:: adafruit_atecc
    :members:
+
+.. automodule:: adafruit_atecc.adafruit_atecc
+   :members:
+
+.. automodule:: adafruit_atecc.adafruit_atecc_asn1
+   :members:
+
+.. automodule:: adafruit_atecc.adafruit_atecc_cert_util
+   :members:

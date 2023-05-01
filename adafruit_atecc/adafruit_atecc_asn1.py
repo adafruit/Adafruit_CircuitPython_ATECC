@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 """
-`atecc_asn1`
+`adafruit_atecc_asn1`
 ================================================================================
 
 ASN.1 Utilities for the Adafruit_ATECC Module.
