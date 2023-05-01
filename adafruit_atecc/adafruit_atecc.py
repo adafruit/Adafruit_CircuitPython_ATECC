@@ -45,6 +45,16 @@ Implementation Notes
 """
 import time
 from struct import pack
+
+# Since the board may or may not have access to the typing library we need
+# to have this in a try/except to enable type  hinting for the IDEs while
+# not breaking the runtime on the controller.
+try:
+    from typing import Any, Sized, Optional
+    from busio import I2C
+except ImportError:
+    pass
+
 from micropython import const
 from adafruit_bus_device.i2c_device import I2CDevice
 from adafruit_binascii import hexlify, unhexlify
@@ -154,12 +164,15 @@ class ATECC:
     CircuitPython interface for ATECCx08A Crypto Co-Processor Devices.
     """
 
-    def __init__(self, i2c_bus, address=_REG_ATECC_DEVICE_ADDR, debug=False):
-        """Initializes an ATECC device.
+    def __init__(
+        self, i2c_bus: I2C, address: int = _REG_ATECC_DEVICE_ADDR, debug: bool = False
+    ):
+        """
+        Initializes an ATECC device.
+
         :param busio i2c_bus: I2C Bus object.
         :param int address: Device address, defaults to _ATECC_DEVICE_ADDR.
         :param bool debug: Library debugging enabled
-
         """
         self._debug = debug
         self._i2cbuf = bytearray(12)
@@ -248,7 +261,7 @@ class ATECC:
         self.lock(0)
         self.lock(1)
 
-    def lock(self, zone):
+    def lock(self, zone: int):
         """Locks specific ATECC zones.
         :param int zone: ATECC zone to lock.
         """
@@ -260,10 +273,13 @@ class ATECC:
         assert res[0] == 0x00, "Failed locking ATECC!"
         self.idle()
 
-    def info(self, mode, param=None):
-        """Returns device state information
-        :param int mode: Mode encoding, see Table 9-26.
+    def info(self, mode: int, param: Optional[Any] = None) -> bytearray:
+        """
+        Returns device state information
 
+        :param int mode: Mode encoding, see Table 9-26.
+        :param param: Optional parameter
+        :return: bytearray containing the response
         """
         self.wakeup()
         if not param:
@@ -276,13 +292,15 @@ class ATECC:
         self.idle()
         return info_out
 
-    def nonce(self, data, mode=0, zero=0x0000):
-        """Generates a nonce by combining internally generated random number
+    def nonce(self, data: bytearray, mode: int = 0, zero: int = 0x0000) -> bytearray:
+        """
+        Generates a nonce by combining internally generated random number
         with an input value.
+
         :param bytearray data: Input value from system or external.
         :param int mode: Controls the internal RNG and seed mechanism.
         :param int zero: Param2, see Table 9-35.
-
+        :return: bytearray containing the calculated nonce
         """
         self.wakeup()
         if mode in (0x00, 0x01):
@@ -309,13 +327,15 @@ class ATECC:
         self.idle()
         return calculated_nonce
 
-    def counter(self, counter=0, increment_counter=True):
-        """Reads the binary count value from one of the two monotonic
+    def counter(self, counter: int = 0, increment_counter: bool = True) -> bytearray:
+        """
+        Reads the binary count value from one of the two monotonic
         counters located on the device within the configuration zone.
         The maximum value that the counter may have is 2,097,151.
+
         :param int counter: Device's counter to increment.
         :param bool increment_counter: Increments the value of the counter specified.
-
+        :return: bytearray with the count
         """
         counter = 0x00
         self.wakeup()
@@ -331,18 +351,20 @@ class ATECC:
         self.idle()
         return count
 
-    def random(self, rnd_min=0, rnd_max=0):
-        """Generates a random number for use by the system.
+    def random(self, rnd_min: int = 0, rnd_max: int = 0) -> int:
+        """
+        Generates a random number for use by the system.
+
         :param int rnd_min: Minimum Random value to generate.
         :param int rnd_max: Maximum random value to generate.
-
+        :return: Random integer
         """
         if rnd_max:
             rnd_min = 0
         if rnd_min >= rnd_max:
             return rnd_min
         delta = rnd_max - rnd_min
-        r = bytes(16)
+        r = bytearray(16)
         r = self._random(r)
         data = 0
         for i in enumerate(r):
@@ -352,10 +374,12 @@ class ATECC:
         data = data % delta
         return data + rnd_min
 
-    def _random(self, data):
-        """Initializes the random number generator and returns.
-        :param bytearray data: Response buffer.
+    def _random(self, data: bytearray) -> bytearray:
+        """
+        Initializes the random number generator and returns.
 
+        :param bytearray data: Response buffer.
+        :return: bytearray
         """
         self.wakeup()
         data_len = len(data)
@@ -371,8 +395,9 @@ class ATECC:
         return data
 
     # SHA-256 Commands
-    def sha_start(self):
-        """Initializes the SHA-256 calculation engine
+    def sha_start(self) -> bytearray:
+        """
+        Initializes the SHA-256 calculation engine
         and the SHA context in memory.
         This method MUST be called before sha_update or sha_digest
         """
@@ -385,11 +410,13 @@ class ATECC:
         self.idle()
         return status
 
-    def sha_update(self, message):
-        """Appends bytes to the message. Can be repeatedly called.
+    def sha_update(self, message: bytes) -> bytearray:
+        """
+        Appends bytes to the message. Can be repeatedly called.
+
         :param bytes message: Up to 64 bytes of data to be included
                                 into the hash operation.
-
+        :return: bytearray containing the status
         """
         self.wakeup()
         self._send_command(OP_SHA, 0x01, 64, message)
@@ -400,12 +427,14 @@ class ATECC:
         self.idle()
         return status
 
-    def sha_digest(self, message=None):
-        """Returns the digest of the data passed to the
+    def sha_digest(self, message: bytearray = None) -> bytearray:
+        """
+        Returns the digest of the data passed to the
         sha_update method so far.
+
         :param bytearray message: Up to 64 bytes of data to be included
                                     into the hash operation.
-
+        :return: bytearray containing the digest
         """
         if not hasattr(message, "append") and message is not None:
             message = pack("B", message)
@@ -422,11 +451,16 @@ class ATECC:
         self.idle()
         return digest
 
-    def gen_key(self, key, slot_num, private_key=False):
-        """Generates a private or public key.
+    def gen_key(
+        self, key: bytearray, slot_num: int, private_key: bool = False
+    ) -> bytearray:
+        """
+        Generates a private or public key.
+
+        :param key: Buffer to put the key into
         :param int slot_num: ECC slot (from 0 to 4).
         :param bool private_key: Generates a private key if true.
-
+        :return: The requested key
         """
         assert 0 <= slot_num <= 4, "Provided slot must be between 0 and 4."
         self.wakeup()
@@ -440,11 +474,13 @@ class ATECC:
         self.idle()
         return key
 
-    def ecdsa_sign(self, slot, message):
-        """Generates and returns a signature using the ECDSA algorithm.
+    def ecdsa_sign(self, slot: int, message: bytearray) -> bytearray:
+        """
+        Generates and returns a signature using the ECDSA algorithm.
+
         :param int slot: Which ECC slot to use.
         :param bytearray message: Message to be signed.
-
+        :return: bytearray containing the signature
         """
         # Load the message digest into TempKey using Nonce (9.1.8)
         self.nonce(message, 0x03)
@@ -453,9 +489,12 @@ class ATECC:
         sig = self.sign(slot)
         return sig
 
-    def sign(self, slot_id):
-        """Performs ECDSA signature calculation with key in provided slot.
+    def sign(self, slot_id: int) -> bytearray:
+        """
+        Performs ECDSA signature calculation with key in provided slot.
+
         :param int slot_id: ECC slot containing key for use with signature.
+        :return: bytearray containing the signature
         """
         self.wakeup()
         self._send_command(0x41, 0x80, slot_id)
@@ -465,8 +504,10 @@ class ATECC:
         self.idle()
         return signature
 
-    def write_config(self, data):
-        """Writes configuration data to the device's EEPROM.
+    def write_config(self, data: bytearray):
+        """
+        Writes configuration data to the device's EEPROM.
+
         :param bytearray data: Configuration data to-write
         """
         # First 16 bytes of data are skipped, not writable
@@ -476,7 +517,14 @@ class ATECC:
                 continue
             self._write(0, i // 4, data[i : i + 4])
 
-    def _write(self, zone, address, buffer):
+    def _write(self, zone: Any, address: int, buffer: bytearray):
+        """
+        Writes to the I2C
+
+        :param Any zone: Zone to send to
+        :param int address: The address to send to
+        :param bytearray buffer: The buffer to send
+        """
         self.wakeup()
         if len(buffer) not in (4, 32):
             raise RuntimeError("Only 4 or 32-byte writes supported.")
@@ -488,7 +536,14 @@ class ATECC:
         self._get_response(status)
         self.idle()
 
-    def _read(self, zone, address, buffer):
+    def _read(self, zone: int, address: int, buffer: bytearray):
+        """
+        Reads from the I2C
+
+        :param int zone: Zone to read from
+        :param int address: The address to read from
+        :param bytearray buffer: The buffer to read to
+        """
         self.wakeup()
         if len(buffer) not in (4, 32):
             raise RuntimeError("Only 4 and 32 byte reads supported")
@@ -500,8 +555,12 @@ class ATECC:
         time.sleep(0.001)
         self.idle()
 
-    def _send_command(self, opcode, param_1, param_2=0x00, data=""):
-        """Sends a security command packet over i2c.
+    def _send_command(
+        self, opcode: int, param_1: int, param_2: int = 0x00, data: Sized = ""
+    ):
+        """
+        Sends a security command packet over i2c.
+
         :param byte opcode: The command Opcode
         :param byte param_1: The first parameter
         :param byte param_2: The second parameter, can be two bytes.
@@ -534,7 +593,7 @@ class ATECC:
         # small sleep
         time.sleep(0.001)
 
-    def _get_response(self, buf, length=None, retries=20):
+    def _get_response(self, buf: Sized, length: int = None, retries: int = 20) -> int:
         self.wakeup()
         if length is None:
             length = len(buf)
@@ -559,7 +618,7 @@ class ATECC:
         return response[1]
 
     @staticmethod
-    def _at_crc(data, length=None):
+    def _at_crc(data: Sized, length: int = None) -> int:
         if length is None:
             length = len(data)
         if not data or not length:

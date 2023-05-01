@@ -38,6 +38,7 @@ Implementation Notes
 """
 from adafruit_binascii import b2a_base64
 import adafruit_atecc.adafruit_atecc_asn1 as asn1
+from adafruit_atecc.adafruit_atecc import ATECC
 
 
 class CSR:
@@ -45,7 +46,8 @@ class CSR:
 
     :param adafruit_atecc atecc: ATECC module.
     :param slot_num: ATECC module slot (from 0 to 4).
-    :param bool private_key: Generate a new private key in selected slot?
+    :param bool private_key: Generate a new private
+                             key in selected slot?
     :param str country: 2-letter country code.
     :param str state_prov: State or Province name,
     :param str city: City name.
@@ -56,7 +58,15 @@ class CSR:
 
     # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(
-        self, atecc, slot_num, private_key, country, state_prov, city, org, org_unit
+        self,
+        atecc: ATECC,
+        slot_num: int,
+        private_key: bool,
+        country: str,
+        state_prov: str,
+        city: str,
+        org: str,
+        org_unit: str,
     ):
         self._atecc = atecc
         self.private_key = private_key
@@ -71,13 +81,13 @@ class CSR:
         self._cert = None
         self._key = None
 
-    def generate_csr(self):
+    def generate_csr(self) -> bytearray:
         """Generates and returns a certificate signing request."""
         self._csr_begin()
         csr = self._csr_end()
         return csr
 
-    def _csr_begin(self):
+    def _csr_begin(self) -> None:
         """Initializes CSR generation."""
         assert 0 <= self._slot <= 4, "Provided slot must be between 0 and 4."
         # Create a new key
@@ -87,7 +97,7 @@ class CSR:
             return
         self._atecc.gen_key(self._key, self._slot, self.private_key)
 
-    def _csr_end(self):
+    def _csr_end(self) -> bytearray:
         """Generates and returns
         a certificate signing request as a base64 string."""
         len_issuer_subject = asn1.issuer_or_subject_length(
