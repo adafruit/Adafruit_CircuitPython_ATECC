@@ -154,7 +154,7 @@ def get_name(name: str, obj_type: int, data: bytearray) -> int:
     return len(name) + 11
 
 
-def get_version(data: bytearray):
+def get_version(data: bytearray) -> None:
     """
     Appends X.509 version to data.
 
@@ -165,7 +165,7 @@ def get_version(data: bytearray):
     data += b"\x02\x01\x00"
 
 
-def get_sequence_header(length: int, data: bytearray):
+def get_sequence_header(length: int, data: bytearray) -> None:
     """
     Appends sequence header to provided data.
 
@@ -182,7 +182,7 @@ def get_sequence_header(length: int, data: bytearray):
     data += length_byte
 
 
-def get_public_key(data: bytearray, public_key: bytearray):
+def get_public_key(data: bytearray, public_key: bytearray) -> None:
     """
     Appends public key subject and object identifiers.
 

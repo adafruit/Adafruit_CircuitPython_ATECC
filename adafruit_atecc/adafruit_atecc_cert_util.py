@@ -81,13 +81,13 @@ class CSR:
         self._cert = None
         self._key = None
 
-    def generate_csr(self):
+    def generate_csr(self) -> bytearray:
         """Generates and returns a certificate signing request."""
         self._csr_begin()
         csr = self._csr_end()
         return csr
 
-    def _csr_begin(self):
+    def _csr_begin(self) -> None:
         """Initializes CSR generation."""
         assert 0 <= self._slot <= 4, "Provided slot must be between 0 and 4."
         # Create a new key
@@ -97,7 +97,7 @@ class CSR:
             return
         self._atecc.gen_key(self._key, self._slot, self.private_key)
 
-    def _csr_end(self):
+    def _csr_end(self) -> bytearray:
         """Generates and returns
         a certificate signing request as a base64 string."""
         len_issuer_subject = asn1.issuer_or_subject_length(

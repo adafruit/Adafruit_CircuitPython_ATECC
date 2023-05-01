@@ -50,12 +50,13 @@ from struct import pack
 # to have this in a try/except to enable type  hinting for the IDEs while
 # not breaking the runtime on the controller.
 try:
-    from typing import Any, Sized
+    from typing import Any, Sized, Optional
+    from busio import I2C
 except ImportError:
     pass
 
 from micropython import const
-from adafruit_bus_device.i2c_device import I2CDevice, I2C
+from adafruit_bus_device.i2c_device import I2CDevice
 from adafruit_binascii import hexlify, unhexlify
 
 __version__ = "0.0.0+auto.0"
@@ -260,7 +261,7 @@ class ATECC:
         self.lock(0)
         self.lock(1)
 
-    def lock(self, zone: Any):
+    def lock(self, zone: int):
         """Locks specific ATECC zones.
         :param int zone: ATECC zone to lock.
         """
@@ -272,7 +273,7 @@ class ATECC:
         assert res[0] == 0x00, "Failed locking ATECC!"
         self.idle()
 
-    def info(self, mode: int, param: Any = None) -> bytearray:
+    def info(self, mode: int, param: Optional[Any] = None) -> bytearray:
         """
         Returns device state information
 
@@ -394,7 +395,7 @@ class ATECC:
         return data
 
     # SHA-256 Commands
-    def sha_start(self):
+    def sha_start(self) -> bytearray:
         """
         Initializes the SHA-256 calculation engine
         and the SHA context in memory.
@@ -409,7 +410,7 @@ class ATECC:
         self.idle()
         return status
 
-    def sha_update(self, message: Any) -> bytearray:
+    def sha_update(self, message: bytes) -> bytearray:
         """
         Appends bytes to the message. Can be repeatedly called.
 
@@ -535,11 +536,11 @@ class ATECC:
         self._get_response(status)
         self.idle()
 
-    def _read(self, zone: Any, address: int, buffer: bytearray):
+    def _read(self, zone: int, address: int, buffer: bytearray):
         """
         Reads from the I2C
 
-        :param Any zone: Zone to read from
+        :param int zone: Zone to read from
         :param int address: The address to read from
         :param bytearray buffer: The buffer to read to
         """
