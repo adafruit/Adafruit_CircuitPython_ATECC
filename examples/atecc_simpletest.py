@@ -5,8 +5,12 @@ import board
 import busio
 from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ
 
+# Set the module wake frequency ping (default 100000)
+atecc_wake_frequency = _WAKE_CLK_FREQ
+# atecc_wake_frequency = 75000  # Recommend 75000 if 100000 does not work
+
 # Initialize the i2c bus
-i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
+i2c = busio.I2C(board.SCL, board.SDA, frequency=atecc_wake_frequency)
 
 # Initialize a new atecc object
 atecc = ATECC(i2c)
