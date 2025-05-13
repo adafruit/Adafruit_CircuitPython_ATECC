@@ -36,7 +36,9 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 """
+
 from adafruit_binascii import b2a_base64
+
 import adafruit_atecc.adafruit_atecc_asn1 as asn1
 from adafruit_atecc.adafruit_atecc import ATECC
 
@@ -56,7 +58,6 @@ class CSR:
 
     """
 
-    # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(
         self,
         atecc: ATECC,

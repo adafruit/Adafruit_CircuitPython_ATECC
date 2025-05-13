@@ -3,9 +3,12 @@
 
 import board
 import busio
-from adafruit_atecc.adafruit_atecc import ATECC, _WAKE_CLK_FREQ, CFG_TLS
 
 import adafruit_atecc.adafruit_atecc_cert_util as cert_utils
+from adafruit_atecc.adafruit_atecc import ATECC, CFG_TLS
+
+# Use 100kHz frequency for wake condition
+WAKE_CLK_FREQ = 100000
 
 # -- Enter your configuration below -- #
 
@@ -29,7 +32,7 @@ GENERATE_PRIVATE_KEY = True
 # -- END Configuration, code below -- #
 
 # Initialize the i2c bus
-i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
+i2c = busio.I2C(board.SCL, board.SDA, frequency=WAKE_CLK_FREQ)
 
 # Initialize a new atecc object
 atecc = ATECC(i2c)
@@ -38,9 +41,7 @@ print("ATECC Serial Number: ", atecc.serial_number)
 
 if not atecc.locked:
     if not LOCK_ATECC:
-        raise RuntimeError(
-            "The ATECC is not locked, set LOCK_ATECC to True in code.py."
-        )
+        raise RuntimeError("The ATECC is not locked, set LOCK_ATECC to True in code.py.")
     print("Writing default configuration to the device...")
     atecc.write_config(CFG_TLS)
     print("Wrote configuration, locking ATECC module...")

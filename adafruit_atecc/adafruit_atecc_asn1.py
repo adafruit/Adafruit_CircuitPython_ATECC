@@ -35,10 +35,10 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 """
+
 import struct
 
 
-# pylint: disable=invalid-name
 def get_signature(signature: bytearray, data: bytearray) -> int:
     """
     Appends signature data to buffer.
@@ -97,7 +97,6 @@ def get_signature(signature: bytearray, data: bytearray) -> int:
     return 21 + r_len + s_len
 
 
-# pylint: disable=too-many-arguments
 def get_issuer_or_subject(
     data: bytearray,
     country: str,
