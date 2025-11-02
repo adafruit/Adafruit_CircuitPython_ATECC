@@ -252,7 +252,7 @@ def issuer_or_subject_length(
     :param str org: Organization of certificate
     :param str org_unit: Organization unit of certificate
     :param str common: Common data of certificate
-    :raises: TypeError if return value is 0
+    :raises: ValueError if return value is <= 0
     :return: Total length of provided certificate information.
     """
     tot_len = 0
@@ -268,6 +268,7 @@ def issuer_or_subject_length(
         tot_len += 11 + len(org_unit)
     if common:
         tot_len += 11 + len(common)
-    else:
-        raise TypeError("Provided length must be > 0")
+
+    if tot_len <= 0:
+        raise ValueError("Provided length must be > 0")
     return tot_len
