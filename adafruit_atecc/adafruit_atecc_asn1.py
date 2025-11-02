@@ -268,7 +268,7 @@ def issuer_or_subject_length(
         tot_len += 11 + len(org_unit)
     if common:
         tot_len += 11 + len(common)
-    
+
     if tot_len <= 0:
         raise ValueError("Provided length must be > 0")
     return tot_len
