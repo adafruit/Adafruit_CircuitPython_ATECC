@@ -94,6 +94,7 @@ OP_LOCK = const(0x17)
 OP_GEN_KEY = const(0x40)
 OP_SIGN = const(0x41)
 OP_WRITE = const(0x12)
+OP_ECDH = const(0x43)
 
 # Maximum execution times, in milliseconds (9-4)
 EXEC_TIME = {
@@ -106,6 +107,7 @@ EXEC_TIME = {
     OP_GEN_KEY: const(115),
     OP_SIGN: const(70),
     OP_WRITE: const(26),
+    OP_ECDH: const(80),
 }
 
 """
@@ -453,6 +455,27 @@ class ATECC:
         assert len(digest) == 32, "SHA response length does not match expected length."
         self.idle()
         return digest
+
+    def ecdh(self, slot_num: int, public_key: bytearray, mode: int = 0x0C) -> bytearray:
+        """
+        Performs ECDH key agreement operation.
+        :param int slot_num: ECC slot (0-4) containing private key.
+        :param bytearray public_key: 64-byte public key (X||Y).
+        :param int mode: Mode parameter, defaults to 0x0C.
+        :return: bytearray containing the shared secret
+        """
+
+        assert len(public_key) == 64, "Public key must be 64 bytes (X||Y)"
+
+        self.wakeup()
+        # Send ECDH command (opcode 0x43)
+        self._send_command(OP_ECDH, mode, slot_num, public_key)
+        time.sleep(EXEC_TIME[OP_ECDH] / 1000)
+
+        response = bytearray(32)  # shared secret
+        self._get_response(response)
+        self.idle()
+        return response
 
     def gen_key(self, key: bytearray, slot_num: int, private_key: bool = False) -> bytearray:
         """
