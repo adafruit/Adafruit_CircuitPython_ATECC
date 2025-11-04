@@ -455,7 +455,7 @@ class ATECC:
         assert len(digest) == 32, "SHA response length does not match expected length."
         self.idle()
         return digest
-    
+
     def ecdh(self, slot_num: int, public_key: bytearray, mode: int = 0x0C) -> bytearray:
         """
         Performs ECDH key agreement operation.
@@ -470,7 +470,7 @@ class ATECC:
         self.wakeup()
         # Send ECDH command (opcode 0x43)
         self._send_command(OP_ECDH, mode, slot_num, public_key)
-        time.sleep(EXEC_TIME[OP_ECDH] / 1000)  
+        time.sleep(EXEC_TIME[OP_ECDH] / 1000)
 
         response = bytearray(32)  # shared secret
         self._get_response(response)
