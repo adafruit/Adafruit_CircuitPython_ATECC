@@ -376,7 +376,7 @@ class ATECC:
             data += r[i[0]]
         if data < 0:
             data = -data
-        data = data % delta
+        data %= delta
         return data + rnd_min
 
     def _random(self, data: bytearray) -> bytearray:
